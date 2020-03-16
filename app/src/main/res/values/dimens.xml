@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="app_bar_height">320dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="width_default_gallery">200dp</dimen>
+    <dimen name="height_default_gallery">200dp</dimen>
+    <dimen name="width_favorite_action">40dp</dimen>
+    <dimen name="height_favorite_action">40dp</dimen>
+
+    <dimen name="normal_separation">10dp</dimen>
+    <dimen name="small_separation">5dp</dimen>
+    <dimen name="small_separation_3">3dp</dimen>
+
+    <dimen name="big_separation">15dp</dimen>
+    <dimen name="big_separation_20">20dp</dimen>
+    <dimen name="bigger_separation">25dp</dimen>
+    <dimen name="biggest_separation">30dp</dimen>
+
+    <dimen name="text_list_size_small">12sp</dimen>
+    <dimen name="text_list_size_normal">14sp</dimen>
+    <dimen name="text_list_size_big">25sp</dimen>
+    <dimen name="width_lottie_detail">200dp</dimen>
+    <dimen name="height_lottie_detail">200dp</dimen>
+    <dimen name="width_lottie_search">60dp</dimen>
+    <dimen name="height_lottie_search">60dp</dimen>
+    <dimen name="width_lottie_item">80dp</dimen>
+    <dimen name="height_lottie_item">80dp</dimen>
+
+</resources>

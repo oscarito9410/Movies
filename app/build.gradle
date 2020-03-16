@@ -1,0 +1,121 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+
+def globalConf = rootProject.ext
+
+
+kapt {
+    generateStubs = true
+}
+
+androidExtensions {
+    experimental = true
+}
+
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "com.aboolean.movies"
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    testImplementation 'junit:junit:4.12'
+
+
+    Map<String, String> dependencies = globalConf.dependencies;
+
+    implementation dependencies.kotlin
+    implementation dependencies.androidX
+    implementation dependencies.recyclerView
+    implementation dependencies.cardView
+    implementation dependencies.supportV4
+    implementation dependencies.supportDesign
+    implementation dependencies.constraintLayout
+    implementation dependencies.navigationFragment
+    implementation dependencies.navigationUi
+
+
+    implementation dependencies.rxJava
+    implementation dependencies.rxAndroid
+
+    implementation dependencies.retrofit
+    implementation dependencies.retrofitConverterGson
+    implementation dependencies.retrofitAdapterRxJava
+    implementation dependencies.okhttp
+    implementation dependencies.okhttpLogging
+
+    implementation dependencies.stetho
+    implementation dependencies.stethoOkhttp
+    implementation dependencies.stethoOkhttp
+
+
+    implementation dependencies.glide
+    annotationProcessor dependencies.glideAnnotation
+    implementation dependencies.circleImage
+
+
+    implementation dependencies.koin
+    implementation dependencies.lottie
+
+
+    androidTestImplementation dependencies.testRunner
+    androidTestImplementation dependencies.espressoCore
+    testImplementation dependencies.robolEletrict
+    testImplementation dependencies.mockito
+    testImplementation dependencies.mockitoKotlin
+
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "com.squareup.retrofit2:converter-moshi:2.3.0"
+    implementation "com.squareup.moshi:moshi:1.6.0"
+    implementation "com.squareup.moshi:moshi-kotlin:1.6.0"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.6.0"
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+    implementation "org.koin:koin-android-viewmodel:2.0.0"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation 'androidx.test:core:1.2.0'
+
+
+
+    def room_version = "2.2.3"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    // optional - RxJava support for Room
+    implementation "androidx.room:room-rxjava2:$room_version"
+    // Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
+
+    androidTestCompile ("android.arch.core:core-testing:$room_version") {
+        exclude module: 'support-compat'
+        exclude module: 'support-annotations'
+        exclude module: 'support-core-utils'
+    }
+
+}

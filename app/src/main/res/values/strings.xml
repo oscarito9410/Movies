@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Movies</string>
+    <string name="text_movies_menu">Movies</string>
+    <string name="text_favorites_menu">Favorites</string>
+    <string name="text_placeholder_votes">%1$s (%2$s votes)</string>
+    <string name="message_max_pages_reached">Max pages has been reached!</string>
+    <string name="message_error_fetching">An error when fetching movies occurred</string>
+    <string name="message_success_add_favorites">Added to favorites successfully</string>
+    <string name="message_success_remove_favorites">Removed from favorites successfully</string>
+    <string name="text_empty_favorites">Your favorite movies will appear here</string>
+</resources>

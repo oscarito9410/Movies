@@ -60,7 +60,7 @@ class PopularMoviesViewModelTest {
     }
 
     @Test
-    fun `fetch popular movies when max page reached and onMaxPagesReached is called`() {
+    fun `fetch popular movies when max page is reached and onMaxPagesReached is called`() {
         whenever(useCase.getPopular(anyInt())).thenReturn(Maybe.just(movies))
         viewModel.run {
             currentPage = Constants.MAX_PAGES

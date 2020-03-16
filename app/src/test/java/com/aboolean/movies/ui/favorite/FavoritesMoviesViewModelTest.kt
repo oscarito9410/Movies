@@ -59,6 +59,21 @@ class FavoritesMoviesViewModelTest {
         }
     }
 
+    @Test
+    fun `update movie successful when is not favorite`() {
+        viewModel.run {
+            updateFavorite(movieId, isFavorite = false)
+            Assert.assertEquals(
+                favoriteMoviesViewState.getOrAwaitValue(),
+                FavoriteMoviesViewState.OnSuccessRemoveFavorite
+            )
+            Assert.assertNotEquals(
+                favoriteMoviesViewState.getOrAwaitValue(),
+                FavoriteMoviesViewState.OnSuccessAddFavorite
+            )
+        }
+    }
+
     private val movies = listOf(Movie(
             id = 1, title = "toy story 2",
             voteCount = 300, voteAverage = 4.2, isFavorite = false, posterPath = "poster.jpg",

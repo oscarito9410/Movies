@@ -57,6 +57,13 @@ Unit tests are located at ```test``` and ```androidtest``` directories.
 * [SonarQuabe](#) - To catch bugs and vulnerabilities in the app
 * [AppCenter](#) - As continuos integration tool.
 
+## Author
+
+Oscar Emilio Pérez Martínez
+* [StackOverFlow](https://stackoverflow.com/users/1710571/oscar-emilio-perez-martinez)
+* [Linkedin](https://www.linkedin.com/in/oscar-perez-martinez-3aa07b63)
+
+
 
 ## License
 [MIT](https://github.com/oscarito9410/Movies/blob/master/LICENSE)

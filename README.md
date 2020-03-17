@@ -59,5 +59,5 @@ Unit tests are located at ```test``` and ```androidtest``` directories.
 
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://github.com/oscarito9410/Movies/blob/master/LICENSE)
 

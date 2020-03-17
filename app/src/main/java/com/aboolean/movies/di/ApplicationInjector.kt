@@ -14,6 +14,7 @@ import com.aboolean.movies.domain.usecase.GetPopularMoviesUseCase
 import com.aboolean.movies.domain.usecase.GetPopularMoviesUseCaseImpl
 import com.aboolean.movies.ui.favorite.FavoritesMoviesViewModel
 import com.aboolean.movies.ui.popular.PopularMoviesViewModel
+import com.aboolean.movies.utils.Constants.DATA_BASE_NAME_MOVIES
 import com.aboolean.movies.utils.Constants.URL_BASE
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import okhttp3.OkHttpClient
@@ -56,7 +57,8 @@ val ApplicationModule = module {
 val NetworkModule = module {
 
     single {
-        Room.databaseBuilder(androidContext(), MoviesDataBase::class.java, "movies_databse").build()
+        Room.databaseBuilder(androidContext(),
+                MoviesDataBase::class.java, DATA_BASE_NAME_MOVIES).build()
     }
 
     single { get<MoviesDataBase>().moviesDao() }

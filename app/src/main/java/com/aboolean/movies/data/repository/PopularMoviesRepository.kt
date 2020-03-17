@@ -19,6 +19,12 @@ interface PopularMoviesRepository : BaseRepository {
 class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
                                   private val moviesDao: MoviesDao) : PopularMoviesRepository {
 
+    /**
+     * Method to get the list of popular movies. Firstly we will check if the movie's page is available
+     * in the local data source in case it doesn't exits then we will make a request to the api to get
+     * the movies.
+     * @return a list of movies sorted
+     */
     override fun getPopular(page: Int): Maybe<List<Movie>> {
         return Single.concat(moviesDao.getPopularLocalMovies(page), movieEndpoints.getPopularMovies(page))
                 .filter { items: Any -> mapMovies(items)?.isNotEmpty() ?: false }
@@ -31,9 +37,11 @@ class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
     }
 
     private fun mapMovies(items: Any): List<Movie>? {
+        //Sort movies when comes form local data source
         return if (items is Collection<*>) {
             sortMovies(items as List<MovieData>)
         } else {
+            //Sort movies when comes from remote data source
             with(items as PageMovie) {
                 saveOnDataBase(this)
                 sortMovies(results)
@@ -41,6 +49,9 @@ class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
         }
     }
 
+    /**
+     * Method to save movies into the local data source (database)
+     */
     private fun saveOnDataBase(pageMovie: PageMovie) {
         pageMovie.results?.toList().also { listMovies ->
             listMovies?.forEach {

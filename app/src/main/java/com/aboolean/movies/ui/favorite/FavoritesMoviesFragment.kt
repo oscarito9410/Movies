@@ -50,7 +50,7 @@ class FavoritesMoviesFragment : BaseFragment() {
         when (viewState) {
             is FavoriteMoviesViewState.OnSuccessAddFavorite -> snack(R.string.message_success_add_favorites)
             is FavoriteMoviesViewState.OnSuccessRemoveFavorite -> snack(R.string.message_success_remove_favorites)
-            is FavoriteMoviesViewState.onResultFavorites -> showFavoritesMovies(viewState.movies)
+            is FavoriteMoviesViewState.OnResultFavorites -> showFavoritesMovies(viewState.movies)
             is FavoriteMoviesViewState.OnEmptyFavorites -> showEmptyFavorites()
         }
     }

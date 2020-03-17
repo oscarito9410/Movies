@@ -16,21 +16,31 @@ class FavoritesMoviesViewModel(private val getFavoritesMoviesUseCase: GetFavorit
     val favoriteMoviesViewState: LiveData<FavoriteMoviesViewState>
         get() = _favoriteViewState
 
+    /**
+     * Live data of favorites movies in this case the fragment will be attached to this live data variable
+     * to observe database changes and update the list of favorite movies in the UI.
+     */
     val favoriteMovies by lazy {
         getFavoritesMoviesUseCase.getFavorites()
     }
 
+    /**
+     * Update favorite movies status
+     */
     fun updateFavorite(id: Long, isFavorite: Boolean) {
         getFavoritesMoviesUseCase.updateFavoriteState(id, isFavorite)
         _favoriteViewState.postValue(getFavoriteViewStateWhenUpdate(isFavorite))
     }
 
+    /**
+     * Handle list of movies and notify to the UI.
+     */
     fun handleFavoritesListResult(movies: List<Movie>?) {
         if (movies.isNullOrEmpty()) {
             _favoriteViewState.postValue(FavoriteMoviesViewState.OnEmptyFavorites)
 
         } else {
-            _favoriteViewState.postValue(FavoriteMoviesViewState.onResultFavorites(movies))
+            _favoriteViewState.postValue(FavoriteMoviesViewState.OnResultFavorites(movies))
         }
     }
 }

@@ -10,6 +10,7 @@ import org.koin.core.context.startKoin
 class MoviesApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        //Start koin modules
         startKoin {
             androidContext(this@MoviesApplication)
             modules(listOf(NetworkModule, ApplicationModule))

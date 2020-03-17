@@ -45,7 +45,7 @@ class FavoritesMoviesViewModelTest {
         viewModel.run {
             handleFavoritesListResult(emptyList())
             Assert.assertEquals(favoriteMoviesViewState.getOrAwaitValue(), FavoriteMoviesViewState.OnEmptyFavorites)
-            Assert.assertNotEquals(favoriteMoviesViewState.getOrAwaitValue(), FavoriteMoviesViewState.onResultFavorites(emptyList()))
+            Assert.assertNotEquals(favoriteMoviesViewState.getOrAwaitValue(), FavoriteMoviesViewState.OnResultFavorites(emptyList()))
         }
     }
 
@@ -54,7 +54,7 @@ class FavoritesMoviesViewModelTest {
     fun `handle favorites list when it is not empty`() {
         viewModel.run {
             handleFavoritesListResult(movies)
-            Assert.assertEquals(favoriteMoviesViewState.getOrAwaitValue(), FavoriteMoviesViewState.onResultFavorites(movies))
+            Assert.assertEquals(favoriteMoviesViewState.getOrAwaitValue(), FavoriteMoviesViewState.OnResultFavorites(movies))
             Assert.assertNotEquals(favoriteMoviesViewState.getOrAwaitValue(), FavoriteMoviesViewState.OnEmptyFavorites)
         }
     }

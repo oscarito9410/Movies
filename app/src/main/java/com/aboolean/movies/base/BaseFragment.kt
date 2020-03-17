@@ -14,6 +14,7 @@ abstract class BaseFragment : Fragment() {
     abstract fun getLayoutView(): Int
     abstract fun initView()
     abstract fun attachObservers()
+
     //Protected fields will be shared in each fragment
     //Verify if the screen orientation is landscape or portrait
     private val isLandScape by lazy {
@@ -35,7 +36,9 @@ abstract class BaseFragment : Fragment() {
         initView()
     }
 
-    //Method to get recyclerview columns according to the current orientation
+    /**
+     * Method to get recyclerview's columns according to the current orientation
+     */
     protected fun getColumnsByOrientation(isLandScape: Boolean) = if (isLandScape) RECYCLER_VIEW_SPAN_COUNT_LANDSCAPE
     else RECYCLER_VIEW_SPAN_COUNT_PORTRAIT
 

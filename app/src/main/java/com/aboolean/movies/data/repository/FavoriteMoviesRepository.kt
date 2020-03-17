@@ -14,6 +14,10 @@ interface FavoriteMoviesRepository : BaseRepository {
 
 class FavoriteMoviesRepositoryImpl(private val moviesDao: MoviesDao) : FavoriteMoviesRepository {
 
+    /**
+     * @return A liveData object within list of movies. In this case liveData is helpful because it will
+     * respond to updates inside database and then will notified to the MVVM.
+     */
     override fun getFavorites(): LiveData<List<Movie>> {
         return Transformations.map(moviesDao.getFavoritesMovies()) {
             sortMovies(it)

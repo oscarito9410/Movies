@@ -37,17 +37,24 @@ class PopularMoviesViewModel(private val getPopularMoviesUseCase: GetPopularMovi
         }
     }
 
+    /**
+     * Update favorite movies status.
+     */
     fun updateFavorite(id: Long, isFavorite: Boolean) {
         getPopularMoviesUseCase.updateFavoriteState(id, isFavorite)
         _favoriteViewState.postValue(getFavoriteViewStateWhenUpdate(isFavorite))
     }
 
+    /**
+     * Method to get popular movies.
+     */
     private fun sendPopularMoviesRequest() {
         getPopularMoviesUseCase.getPopular(currentPage)
                 .doOnSubscribe {
                     _popularViewState.postValue(PopularMoviesViewState.OnLoading)
                 }
                 .doOnSuccess {
+                    //Update the current page only when is successful the request
                     currentPage++
                     _popularViewState.postValue(PopularMoviesViewState.OnSuccessFetch(currentPage))
                 }
@@ -58,5 +65,8 @@ class PopularMoviesViewModel(private val getPopularMoviesUseCase: GetPopularMovi
                 }).addTo(compositeDisposable)
     }
 
+    /**
+     * Method to verify if the user can request more pages.
+     */
     private fun canLoadMoreMovies(currentPage: Int) = currentPage < Constants.MAX_PAGES
 }

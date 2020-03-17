@@ -68,3 +68,6 @@ Oscar Emilio Pérez Martínez
 ## License
 [MIT](https://github.com/oscarito9410/Movies/blob/master/LICENSE)
 
+
+## Screenshot
+<img src="https://github.com/oscarito9410/Movies/blob/master/screenshot.png" width="350" height="350" title="hover text">

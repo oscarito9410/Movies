@@ -70,4 +70,4 @@ Oscar Emilio Pérez Martínez
 
 
 ## Screenshot
-<img src="https://github.com/oscarito9410/Movies/blob/master/screenshot.png" width="350" height="350" title="hover text">
+<img src="https://github.com/oscarito9410/Movies/blob/master/screenshot.png" width="650" height="650" title="hover text">

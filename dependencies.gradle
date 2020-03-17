@@ -31,8 +31,13 @@ ext {
     roboeletricVersion = "3.0"
     mockitoVersion = "2.13.0"
     mockitoKotlinVersion = "2.1.0"
+    roomVersion = "2.2.3"
 
     dependencies = [
+            coreKtx                : "androidx.core:core-ktx:1.2.0",
+            googleMaterial         : "com.google.android.material:material:1.1.0",
+            legacySupportV4        : "androidx.legacy:legacy-support-v4:1.0.0",
+            legacySupportV13       : "androidx.legacy:legacy-support-v13:1.0.0",
             androidX               : "androidx.appcompat:appcompat:$androidXVersion",
             constraintLayout       : "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion",
             lifecyleExtentions     : "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion",
@@ -43,7 +48,7 @@ ext {
             dataBinding            : "com.android.databinding:compiler:2.0.0",
             multidex               : "com.android.support:multidex:$multidexVersion",
             navigationFragment     : "android.arch.navigation:navigation-fragment:1.0.0",
-            navigationUi          : "android.arch.navigation:navigation-ui:1.0.0",
+            navigationUi           : "android.arch.navigation:navigation-ui:1.0.0",
 
             parcel                 : "org.parceler:parceler-api:$parcelerVersion",
             parcelCompiler         : "org.parceler:parceler:$parcelerVersion",
@@ -53,16 +58,29 @@ ext {
             dagger                 : "com.google.dagger:dagger:$daggerVersion",
             javaXAnnotations       : "org.glassfish:javax.annotation:10.0-b28",
 
-            rxKotlin               : "io.reactivex:rxkotlin:0.40.1",
+            rxKotlin               : "io.reactivex.rxjava2:rxkotlin:2.3.0",
             rxJava                 : "io.reactivex.rxjava2:rxjava:$rxVersion",
             rxAndroid              : "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
 
             kotlin                 : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+            koinViewModel          : "org.koin:koin-android-viewmodel:2.0.0",
             koin                   : "org.koin:koin-android:$koinVersion",
+            moshi                  : "com.squareup.moshi:moshi:1.6.0",
+            moshiKapt              : "com.squareup.moshi:moshi-kotlin-codegen:1.6.0",
 
             retrofit               : "com.squareup.retrofit2:retrofit:$retrofitVersion",
             retrofitConverterGson  : "com.squareup.retrofit2:converter-gson:$retrofitVersion",
             retrofitAdapterRxJava  : "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
+            retrofitConverterMoshi : "com.squareup.retrofit2:converter-moshi:2.3.0",
+
+
+            roomRuntime            : "androidx.room:room-runtime:$roomVersion",
+            roomRxJava             : "androidx.room:room-rxjava2:$roomVersion",
+            roomTesting            : "androidx.room:room-testing:$roomVersion",
+            roomKapt               : "androidx.room:room-compiler:$roomVersion",
+            archCoreTesting        : "android.arch.core:core-testing:$roomVersion",
+
+
             okhttp                 : "com.squareup.okhttp3:okhttp:$okHttpVersion",
             okhttpLogging          : "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
             stetho                 : "com.facebook.stetho:stetho:$stethoVersion",

@@ -1,5 +1,6 @@
 package com.aboolean.movies.base
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +15,17 @@ abstract class BaseFragment : Fragment() {
     abstract fun initView()
     abstract fun attachObservers()
     //Protected fields will be shared in each fragment
+    //Verify if the screen orientation is landscape or portrait
+    private val isLandScape by lazy {
+        context?.resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE
+    }
     protected val moviesAdapter = MoviesAdapter(mutableListOf())
     protected val moviesLayoutManager by lazy {
-        StaggeredGridLayoutManager(RECYCLER_VIEW_SPAN_COUNT_PORTRAIT,
+        StaggeredGridLayoutManager(
+            getColumnsByOrientation(isLandScape),
                 StaggeredGridLayoutManager.VERTICAL)
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(getLayoutView(), container, false)
     }

@@ -11,13 +11,18 @@ import com.aboolean.movies.utils.extensions.posterFullUrl
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_popular_movie.view.*
 
-class MoviesAdapter(private val movies: MutableList<Movie>) : RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
+class MoviesAdapter(private val movies: MutableList<Movie>) :
+    RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
 
     private var itemClickListener: ((Movie) -> Unit?)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_popular_movie,
-                parent, false))
+        return ViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_popular_movie,
+                parent, false
+            )
+        )
     }
 
     override fun getItemCount(): Int = movies.size
@@ -48,10 +53,13 @@ class MoviesAdapter(private val movies: MutableList<Movie>) : RecyclerView.Adapt
             itemView.apply {
                 with(movie) {
                     tvMovieTitle.text = title
-                    tvTotalPointsItem.text = context.getString(R.string.text_placeholder_votes, voteAverage.toString(),
-                            voteCount.toString())
+                    tvTotalPointsItem.text = context.getString(
+                        R.string.text_placeholder_votes, voteAverage.toString(),
+                        voteCount.toString()
+                    )
                     Glide.with(context).asDrawable().load(posterPath.posterFullUrl)
-                            .into(ivMoviePoster)
+                        .placeholder(R.drawable.ic_movie_favorite)
+                        .into(ivMoviePoster)
                     ivMovieFavoriteState.setImageResource(isFavorite.imageFavoriteResource)
                 }
                 setOnClickListener { itemClickListener?.invoke(movie) }

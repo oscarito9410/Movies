@@ -21,7 +21,7 @@ fun View.gone() {
     visibility = View.GONE
 }
 
-fun FragmentActivity.snack(@StringRes message: Int, duration: Int = Snackbar.LENGTH_LONG) {
+fun FragmentActivity.snack(@StringRes message: Int, duration: Int = Snackbar.LENGTH_SHORT) {
     val view: View = this.window.decorView.findViewById(android.R.id.content)
     Snackbar.make(view, this.getString(message), duration).show()
 }

@@ -1,6 +1,7 @@
 package com.aboolean.movies.ui.favorite
 
 import android.content.res.Configuration
+import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.aboolean.movies.R
 import com.aboolean.movies.base.BaseFragment
@@ -21,6 +22,10 @@ class FavoritesMoviesFragment : BaseFragment() {
 
     override fun initView() {
         initAdapterManager()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         attachObservers()
     }
 
@@ -35,11 +40,11 @@ class FavoritesMoviesFragment : BaseFragment() {
 
     override fun attachObservers() {
         viewModel.apply {
-            favoriteMovies.observe(this@FavoritesMoviesFragment, Observer {
+            favoriteMovies.observe(viewLifecycleOwner, Observer {
                 handleFavoritesListResult(it)
 
             })
-            favoriteMoviesViewState.observe(this@FavoritesMoviesFragment, Observer {
+            favoriteMoviesViewState.observe(viewLifecycleOwner, Observer {
                 handleFavoriteViewState(it)
             })
         }

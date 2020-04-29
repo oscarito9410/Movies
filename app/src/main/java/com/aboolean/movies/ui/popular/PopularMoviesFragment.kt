@@ -1,6 +1,7 @@
 package com.aboolean.movies.ui.popular
 
 import android.content.res.Configuration
+import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.aboolean.movies.R
 import com.aboolean.movies.base.BaseFragment
@@ -21,8 +22,12 @@ class PopularMoviesFragment : BaseFragment() {
     override fun getLayoutView(): Int = R.layout.fragment_home_movies
 
     override fun initView() {
-        attachObservers()
         initAdapterManager()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        attachObservers()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -37,14 +42,14 @@ class PopularMoviesFragment : BaseFragment() {
     override fun attachObservers() {
         viewModel.apply {
             fetchPopularMovies()
-            popularMovies.observe(this@PopularMoviesFragment, Observer {
+            popularMovies.observe(viewLifecycleOwner, Observer {
                 moviesAdapter.addNewMovies(it)
             })
-            popularViewState.observe(this@PopularMoviesFragment, Observer {
+            popularViewState.observe(viewLifecycleOwner, Observer {
                 handlePopularViewState(it)
             })
 
-            favoriteMoviesViewState.observe(this@PopularMoviesFragment, Observer {
+            favoriteMoviesViewState.observe(viewLifecycleOwner, Observer {
                 handleFavoriteViewState(it)
             })
         }
@@ -90,10 +95,12 @@ class PopularMoviesFragment : BaseFragment() {
     }
 
     private fun addScrollListener() {
-        InfiniteScrollProvider().attach(rvPopularMovies, object : InfiniteScrollProvider.OnLoadMoreListener {
-            override fun onLoadMore() {
-                viewModel.fetchPopularMovies()
-            }
-        })
+        InfiniteScrollProvider().attach(
+            rvPopularMovies,
+            object : InfiniteScrollProvider.OnLoadMoreListener {
+                override fun onLoadMore() {
+                    viewModel.fetchPopularMovies()
+                }
+            })
     }
 }

@@ -11,9 +11,15 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 interface PopularMoviesRepository : BaseRepository {
     fun getPopular(page: Int): Maybe<List<Movie>>
+    suspend fun suspendGetPopular(page : Int) : List<Movie> {
+        TODO("You must implement this method when you want to retrieve popular movies using coroutines")
+    }
 }
 
 class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
@@ -36,6 +42,25 @@ class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
                 }
     }
 
+    override suspend fun suspendGetPopular(page: Int): List<Movie> = withContext(IO){
+        val localMovies = moviesDao.suspendGetPopularLocalMovies(page)
+        val remoteMovies = try {
+            movieEndpoints.suspendGetPopularMovies(page)
+        } catch (ex : Exception) {
+            null
+        }
+
+        if (remoteMovies != null){
+            suspendSaveOnDataBase(remoteMovies)
+        }
+
+        if (localMovies.isEmpty() && remoteMovies != null){
+            sortMovies(remoteMovies.results).orEmpty()
+        } else {
+            sortMovies(localMovies).orEmpty()
+        }
+    }
+
     private fun mapMovies(items: Any): List<Movie>? {
         //Sort movies when comes form local data source
         return if (items is Collection<*>) {
@@ -49,6 +74,7 @@ class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
         }
     }
 
+
     /**
      * Method to save movies into the local data source (database)
      */
@@ -60,6 +86,15 @@ class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe()
+            }
+        }
+    }
+
+    private suspend fun suspendSaveOnDataBase(pageMovie: PageMovie) {
+        pageMovie.results?.toList().also { listMovies ->
+            listMovies?.forEach {
+                it.page = pageMovie.page
+                moviesDao.suspendInsert(it)
             }
         }
     }

@@ -85,6 +85,8 @@ dependencies {
     implementation dependencies.rxKotlin
     implementation dependencies.rxAndroid
 
+    implementation dependencies.kotlinCoroutines
+
     implementation dependencies.moshi
     implementation dependencies.retrofit
     implementation dependencies.retrofitConverterMoshi
@@ -108,6 +110,7 @@ dependencies {
 
     implementation dependencies.roomRuntime
     implementation dependencies.roomRxJava
+    implementation dependencies.roomCoroutines
     testImplementation dependencies.roomTesting
 
 

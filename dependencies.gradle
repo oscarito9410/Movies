@@ -6,7 +6,7 @@ ext {
     daggerVersion = '2.1'
     rxVersion = '2.2.7'
     rxAndroidVersion = "2.1.0"
-    retrofitVersion = '2.5.0'
+    retrofitVersion = '2.6.2'
     espressoVersion = '3.1.0-alpha4'
     logginInterceptor = "3.9.1"
     okHttpVersion = '3.9.1'
@@ -31,7 +31,8 @@ ext {
     roboeletricVersion = "3.0"
     mockitoVersion = "2.13.0"
     mockitoKotlinVersion = "2.1.0"
-    roomVersion = "2.2.3"
+    roomVersion = "2.2.5"
+    kotlinCoroutinesVersion = "1.3.0"
 
     dependencies = [
             coreKtx                : "androidx.core:core-ktx:1.2.0",
@@ -73,9 +74,11 @@ ext {
             retrofitAdapterRxJava  : "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
             retrofitConverterMoshi : "com.squareup.retrofit2:converter-moshi:2.3.0",
 
+            kotlinCoroutines       : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion",
 
             roomRuntime            : "androidx.room:room-runtime:$roomVersion",
             roomRxJava             : "androidx.room:room-rxjava2:$roomVersion",
+            roomCoroutines         : "androidx.room:room-ktx:$roomVersion",
             roomTesting            : "androidx.room:room-testing:$roomVersion",
             roomKapt               : "androidx.room:room-compiler:$roomVersion",
             archCoreTesting        : "android.arch.core:core-testing:$roomVersion",

@@ -6,6 +6,7 @@ import com.aboolean.movies.base.BaseViewModel
 import com.aboolean.movies.domain.model.Movie
 import com.aboolean.movies.domain.usecase.GetFavoritesMoviesUseCase
 import com.aboolean.movies.ui.model.FavoriteMoviesViewState
+import kotlinx.coroutines.launch
 
 class FavoritesMoviesViewModel(private val getFavoritesMoviesUseCase: GetFavoritesMoviesUseCase) : BaseViewModel() {
 
@@ -28,8 +29,22 @@ class FavoritesMoviesViewModel(private val getFavoritesMoviesUseCase: GetFavorit
      * Update favorite movies status
      */
     fun updateFavorite(id: Long, isFavorite: Boolean) {
+        suspendUpdateAndPostFavorite(id, isFavorite)
+    }
+
+    private fun updateAndPostFavorite(id: Long, isFavorite: Boolean) {
         getFavoritesMoviesUseCase.updateFavoriteState(id, isFavorite)
         _favoriteViewState.postValue(getFavoriteViewStateWhenUpdate(isFavorite))
+    }
+
+    private fun suspendUpdateAndPostFavorite(id: Long, isFavorite: Boolean) {
+        launch {
+            val updateFavoriteResult =
+                runCatching { getFavoritesMoviesUseCase.suspendUpdateFavoriteState(id, isFavorite) }
+            updateFavoriteResult.onSuccess {
+                _favoriteViewState.postValue(getFavoriteViewStateWhenUpdate(isFavorite))
+            }
+        }
     }
 
     /**

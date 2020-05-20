@@ -10,6 +10,9 @@ import io.reactivex.schedulers.Schedulers
 interface FavoriteMoviesRepository : BaseRepository {
     fun getFavorites(): LiveData<List<Movie>>
     fun updateFavoriteState(id: Long, isFavorite: Boolean)
+    suspend fun suspendUpdateFavoriteState(id: Long, isFavorite: Boolean) {
+        TODO("You must implement if you want to update favorites using coroutines")
+    }
 }
 
 class FavoriteMoviesRepositoryImpl(private val moviesDao: MoviesDao) : FavoriteMoviesRepository {
@@ -28,5 +31,9 @@ class FavoriteMoviesRepositoryImpl(private val moviesDao: MoviesDao) : FavoriteM
         moviesDao.updateFavorite(id, isFavorite)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe()
+    }
+
+    override suspend fun suspendUpdateFavoriteState(id: Long, isFavorite: Boolean) {
+        moviesDao.suspendUpdateFavorite(id, isFavorite)
     }
 }

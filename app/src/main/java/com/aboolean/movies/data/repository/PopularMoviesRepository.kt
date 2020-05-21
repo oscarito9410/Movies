@@ -2,6 +2,7 @@
 
 package com.aboolean.movies.data.repository
 
+import com.aboolean.movies.core.DispatcherProvider
 import com.aboolean.movies.data.local.MoviesDao
 import com.aboolean.movies.data.model.MovieData
 import com.aboolean.movies.data.model.PageMovie
@@ -11,9 +12,7 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 interface PopularMoviesRepository : BaseRepository {
     fun getPopular(page: Int): Maybe<List<Movie>>
@@ -23,7 +22,8 @@ interface PopularMoviesRepository : BaseRepository {
 }
 
 class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
-                                  private val moviesDao: MoviesDao) : PopularMoviesRepository {
+                                  private val moviesDao: MoviesDao,
+                                  private val dispatcherProvider: DispatcherProvider) : PopularMoviesRepository {
 
     /**
      * Method to get the list of popular movies. Firstly we will check if the movie's page is available
@@ -42,7 +42,7 @@ class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
                 }
     }
 
-    override suspend fun suspendGetPopular(page: Int): List<Movie> = withContext(IO){
+    override suspend fun suspendGetPopular(page: Int): List<Movie> = withContext(dispatcherProvider.io()){
         val localMovies = moviesDao.suspendGetPopularLocalMovies(page)
         val remoteMovies = try {
             movieEndpoints.suspendGetPopularMovies(page)

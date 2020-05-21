@@ -119,6 +119,7 @@ dependencies {
     testImplementation dependencies.robolEletrict
     testImplementation dependencies.mockito
     testImplementation dependencies.mockitoKotlin
+    testImplementation dependencies.testCoroutines
 
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation 'androidx.test:core:1.2.0'

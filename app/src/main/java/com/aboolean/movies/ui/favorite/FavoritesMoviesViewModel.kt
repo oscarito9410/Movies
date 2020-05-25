@@ -32,6 +32,7 @@ class FavoritesMoviesViewModel(private val getFavoritesMoviesUseCase: GetFavorit
         suspendUpdateAndPostFavorite(id, isFavorite)
     }
 
+    @Deprecated("This method was changed for using kotlin coroutines")
     private fun updateAndPostFavorite(id: Long, isFavorite: Boolean) {
         getFavoritesMoviesUseCase.updateFavoriteState(id, isFavorite)
         _favoriteViewState.postValue(getFavoriteViewStateWhenUpdate(isFavorite))

@@ -6,9 +6,7 @@ import com.aboolean.movies.domain.model.Movie
 
 interface GetFavoritesMoviesUseCase : BaseUseCase {
     fun getFavorites(): LiveData<List<Movie>>
-    suspend fun suspendUpdateFavoriteState(id: Long, isFavorite: Boolean) {
-        TODO("You must implement if you want to update favorites using coroutines")
-    }
+    suspend fun suspendUpdateFavoriteState(id: Long, isFavorite: Boolean)
 }
 
 class GetFavoritesMoviesUseCaseImpl(private val favoriteMoviesRepository: FavoriteMoviesRepository) : GetFavoritesMoviesUseCase {

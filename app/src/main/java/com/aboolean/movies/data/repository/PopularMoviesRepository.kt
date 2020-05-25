@@ -16,14 +16,14 @@ import kotlinx.coroutines.withContext
 
 interface PopularMoviesRepository : BaseRepository {
     fun getPopular(page: Int): Maybe<List<Movie>>
-    suspend fun suspendGetPopular(page : Int) : List<Movie> {
-        TODO("You must implement this method when you want to retrieve popular movies using coroutines")
-    }
+    suspend fun suspendGetPopular(page: Int): List<Movie>
 }
 
-class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
-                                  private val moviesDao: MoviesDao,
-                                  private val dispatcherProvider: DispatcherProvider) : PopularMoviesRepository {
+class PopularMoviesRepositoryImpl(
+    private val movieEndpoints: MovieEndpoints,
+    private val moviesDao: MoviesDao,
+    private val dispatcherProvider: DispatcherProvider
+) : PopularMoviesRepository {
 
     /**
      * Method to get the list of popular movies. Firstly we will check if the movie's page is available
@@ -32,30 +32,34 @@ class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
      * @return a list of movies sorted
      */
     override fun getPopular(page: Int): Maybe<List<Movie>> {
-        return Single.concat(moviesDao.getPopularLocalMovies(page), movieEndpoints.getPopularMovies(page))
-                .filter { items: Any -> mapMovies(items)?.isNotEmpty() ?: false }
-                .firstElement()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map {
-                    mapMovies(it)
-                }
+        return Single.concat(
+            moviesDao.getPopularLocalMovies(page),
+            movieEndpoints.getPopularMovies(page)
+        )
+            .filter { items: Any -> mapMovies(items)?.isNotEmpty() ?: false }
+            .firstElement()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map {
+                mapMovies(it)
+            }
     }
 
-    override suspend fun suspendGetPopular(page: Int): List<Movie> = withContext(dispatcherProvider.io()){
-    val localMovies = moviesDao.suspendGetPopularLocalMovies(page)
-        runCatching {
-            movieEndpoints.suspendGetPopularMovies(page)
-        }.getOrNull()?.let { remoteMovies->
-            suspendSaveOnDataBase(remoteMovies)
-            when {
-                localMovies.isEmpty() -> sortMovies(remoteMovies.results)
-                else -> sortMovies(localMovies)
+    override suspend fun suspendGetPopular(page: Int): List<Movie> =
+        withContext(dispatcherProvider.io()) {
+            val localMovies = moviesDao.suspendGetPopularLocalMovies(page)
+            runCatching {
+                movieEndpoints.suspendGetPopularMovies(page)
+            }.getOrNull()?.let { remoteMovies ->
+                suspendSaveOnDataBase(remoteMovies)
+                when {
+                    localMovies.isEmpty() -> sortMovies(remoteMovies.results)
+                    else -> sortMovies(localMovies)
+                }
+            }.orEmpty().also {
+                sortMovies(localMovies)
             }
-        }.orEmpty().also {
-            sortMovies(localMovies)
         }
-    }
 
     private fun mapMovies(items: Any): List<Movie>? {
         //Sort movies when comes form local data source
@@ -79,9 +83,9 @@ class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
             listMovies?.forEach {
                 it.page = pageMovie.page
                 moviesDao.insert(it)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
             }
         }
     }

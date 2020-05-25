@@ -12,9 +12,7 @@ import kotlinx.coroutines.withContext
 interface FavoriteMoviesRepository : BaseRepository {
     fun getFavorites(): LiveData<List<Movie>>
     fun updateFavoriteState(id: Long, isFavorite: Boolean)
-    suspend fun suspendUpdateFavoriteState(id: Long, isFavorite: Boolean) {
-        TODO("You must implement if you want to update favorites using coroutines")
-    }
+    suspend fun suspendUpdateFavoriteState(id: Long, isFavorite: Boolean)
 }
 
 class FavoriteMoviesRepositoryImpl(

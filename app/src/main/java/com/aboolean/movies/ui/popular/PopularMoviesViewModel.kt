@@ -46,6 +46,7 @@ class PopularMoviesViewModel(private val getPopularMoviesUseCase: GetPopularMovi
         suspendUpdateAndPostFavorite(id, isFavorite)
     }
 
+    @Deprecated("This method was changed for using kotlin coroutines")
     private fun updateAndPostFavorite(id: Long, isFavorite: Boolean) {
         getPopularMoviesUseCase.updateFavoriteState(id, isFavorite)
         _favoriteViewState.postValue(getFavoriteViewStateWhenUpdate(isFavorite))
@@ -64,6 +65,7 @@ class PopularMoviesViewModel(private val getPopularMoviesUseCase: GetPopularMovi
     /**
      * Method to get popular movies.
      */
+    @Deprecated("This method was changed for using kotlin coroutines")
     private fun sendPopularMoviesRequest() {
         getPopularMoviesUseCase.getPopular(currentPage)
             .doOnSubscribe {

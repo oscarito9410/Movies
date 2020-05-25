@@ -43,21 +43,17 @@ class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
     }
 
     override suspend fun suspendGetPopular(page: Int): List<Movie> = withContext(dispatcherProvider.io()){
-        val localMovies = moviesDao.suspendGetPopularLocalMovies(page)
-        val remoteMovies = try {
+    val localMovies = moviesDao.suspendGetPopularLocalMovies(page)
+        runCatching {
             movieEndpoints.suspendGetPopularMovies(page)
-        } catch (ex : Exception) {
-            null
-        }
-
-        if (remoteMovies != null){
+        }.getOrNull()?.let { remoteMovies->
             suspendSaveOnDataBase(remoteMovies)
-        }
-
-        if (localMovies.isEmpty() && remoteMovies != null){
-            sortMovies(remoteMovies.results).orEmpty()
-        } else {
-            sortMovies(localMovies).orEmpty()
+            when {
+                localMovies.isEmpty() -> sortMovies(remoteMovies.results)
+                else -> sortMovies(localMovies)
+            }
+        }.orEmpty().also {
+            sortMovies(localMovies)
         }
     }
 
@@ -99,4 +95,3 @@ class PopularMoviesRepositoryImpl(private val movieEndpoints: MovieEndpoints,
         }
     }
 }
-

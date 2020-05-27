@@ -1,7 +1,7 @@
 package com.aboolean.movies.data.repository
 
 import com.aboolean.movies.data.local.MoviesDao
-import com.aboolean.movies.data.model.MovieData
+import com.aboolean.movies.data.mocks.MockData.movies
 import com.aboolean.movies.data.model.PageMovie
 import com.aboolean.movies.data.remote.MovieEndpoints
 import com.aboolean.movies.rules.CoroutineTestRule
@@ -53,14 +53,7 @@ class MovieRepositoryTest {
         //Returning data from local data source
         whenever(movieDao.getPopularLocalMovies(movieId)).thenReturn(SingleJust.just(movies))
         //Returning empty data from network data source
-        whenever(movieEndPoints.getPopularMovies(movieId)).thenReturn(
-            Single.just(
-                PageMovie(
-                    page = movieId, totalPage = 500,
-                    results = emptyList()
-                )
-            )
-        )
+        whenever(movieEndPoints.getPopularMovies(movieId)).thenReturn(Single.just(PageMovie(page = movieId, totalPage = 500, results = emptyList())))
         repositoryPopularMovies.getPopular(movieId).test().assertNoErrors().assertValue {
             val movieDomain = it.first()
             val movieData = movies[1]
@@ -74,20 +67,8 @@ class MovieRepositoryTest {
     @Test
     fun `get popular movies from local and remote data source unsuccessfully`() {
         //Both data sources will return an exception
-        whenever(movieDao.getPopularLocalMovies(1)).thenReturn(
-            Single.error(
-                Exception(
-                    messageException
-                )
-            )
-        )
-        whenever(movieEndPoints.getPopularMovies(1)).thenReturn(
-            Single.error(
-                Exception(
-                    messageException
-                )
-            )
-        )
+        whenever(movieDao.getPopularLocalMovies(1)).thenReturn(Single.error(Exception(messageException)))
+        whenever(movieEndPoints.getPopularMovies(1)).thenReturn(Single.error(Exception(messageException)))
         repositoryPopularMovies.getPopular(1).test().assertError {
             //Asset exception message is correct
             it.message == messageException
@@ -126,19 +107,10 @@ class MovieRepositoryTest {
             //Returning an empty list from local data source and then request data to network data source
             whenever(movieDao.suspendGetPopularLocalMovies(movieId)).thenReturn(emptyList())
             //Request data from network data source
-            whenever(movieEndPoints.suspendGetPopularMovies(movieId)).thenReturn(
-                PageMovie(
-                    page = movieId, totalPage = 500,
-                    results = movies
-                )
-            )
+            whenever(movieEndPoints.suspendGetPopularMovies(movieId)).thenReturn(PageMovie(page = movieId, totalPage = 500, results = movies))
             //Mock response when saving data to local data source
-            whenever(movieDao.suspendInsert(any())).then {
-                Result.success(Unit)
-            }
-
+            whenever(movieDao.suspendInsert(any())).then { Result.success(Unit) }
             val result = runCatching { repositoryPopularMovies.suspendGetPopular(movieId) }
-
             val movieDomain = result.getOrDefault(emptyList()).first()
             val movieData = movies[1]
 
@@ -171,31 +143,11 @@ class MovieRepositoryTest {
         //Returning data from local data source
         whenever(movieDao.getPopularLocalMovies(movieId)).thenReturn(SingleJust.just(movies))
         //Returning empty data from network data source
-        whenever(movieEndPoints.getPopularMovies(movieId)).thenReturn(
-            Single.just(
-                PageMovie(
-                    page = movieId, totalPage = 500,
-                    results = emptyList()
-                )
-            )
-        )
+        whenever(movieEndPoints.getPopularMovies(movieId)).thenReturn(Single.just(PageMovie(page = movieId, totalPage = 500, results = emptyList())))
         repositoryPopularMovies.getPopular(movieId).test().assertNoErrors().assertValue {
             val movieDomain = it.first()
             movieDomain.title == "Guason" && movieDomain.voteAverage == 9.2 &&
                     !movieDomain.isFavorite && movieDomain.overview == "Amazing movie"
         }
     }
-
-    private val movies = listOf(
-        MovieData(
-            id = 1, title = "toy story 2",
-            voteCount = 300, voteAverage = 4.2, isFavorite = false, posterPath = "poster.jpg",
-            releaseDate = "19/03/2002", overview = "Amazing movie", page = 1
-        ),
-        MovieData(
-            id = 2, title = "Guason",
-            voteCount = 300, voteAverage = 9.2, isFavorite = false, posterPath = "poster.jpg",
-            releaseDate = "19/03/2002", overview = "Amazing movie", page = 1
-        )
-    )
 }

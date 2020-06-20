@@ -7,13 +7,16 @@ import com.aboolean.movies.ui.model.FavoriteMoviesViewState
 import com.aboolean.movies.utils.extensions.getOrAwaitValue
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.schedulers.Schedulers
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.*
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
+@ExperimentalCoroutinesApi
 class FavoritesMoviesViewModelTest {
 
     @JvmField
@@ -23,12 +26,20 @@ class FavoritesMoviesViewModelTest {
     private lateinit var useCase: GetFavoritesMoviesUseCase
     private lateinit var viewModel: FavoritesMoviesViewModel
     private val movieId = 1L
+    private val testDispatcher = TestCoroutineDispatcher()
 
     @Before
     fun setUp() {
+        Dispatchers.setMain(testDispatcher)
         MockitoAnnotations.initMocks(this)
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
         viewModel = FavoritesMoviesViewModel(useCase)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+        testDispatcher.cleanupTestCoroutines()
     }
 
     @Test

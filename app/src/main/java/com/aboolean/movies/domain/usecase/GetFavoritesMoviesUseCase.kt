@@ -6,6 +6,7 @@ import com.aboolean.movies.domain.model.Movie
 
 interface GetFavoritesMoviesUseCase : BaseUseCase {
     fun getFavorites(): LiveData<List<Movie>>
+    suspend fun suspendUpdateFavoriteState(id: Long, isFavorite: Boolean)
 }
 
 class GetFavoritesMoviesUseCaseImpl(private val favoriteMoviesRepository: FavoriteMoviesRepository) : GetFavoritesMoviesUseCase {
@@ -16,5 +17,9 @@ class GetFavoritesMoviesUseCaseImpl(private val favoriteMoviesRepository: Favori
 
     override fun updateFavoriteState(id: Long, isFavorite: Boolean) {
         favoriteMoviesRepository.updateFavoriteState(id, isFavorite)
+    }
+
+    override suspend fun suspendUpdateFavoriteState(id: Long, isFavorite: Boolean) {
+        favoriteMoviesRepository.suspendUpdateFavoriteState(id, isFavorite)
     }
 }

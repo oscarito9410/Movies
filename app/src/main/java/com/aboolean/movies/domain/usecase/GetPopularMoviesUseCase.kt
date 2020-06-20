@@ -7,6 +7,8 @@ import io.reactivex.Maybe
 
 interface GetPopularMoviesUseCase : BaseUseCase {
     fun getPopular(page: Int): Maybe<List<Movie>>
+    suspend fun suspendGetPopular(page : Int) : List<Movie>
+    suspend fun suspendUpdateFavoriteState(id: Long, isFavorite: Boolean)
 }
 
 class GetPopularMoviesUseCaseImpl(private val repositoryPopularMovies: PopularMoviesRepository,
@@ -18,5 +20,13 @@ class GetPopularMoviesUseCaseImpl(private val repositoryPopularMovies: PopularMo
 
     override fun updateFavoriteState(id: Long, isFavorite: Boolean) {
         repositoryFavoriteMovies.updateFavoriteState(id, isFavorite)
+    }
+
+    override suspend fun suspendGetPopular(page: Int) : List<Movie> {
+        return repositoryPopularMovies.suspendGetPopular(page)
+    }
+
+    override suspend fun suspendUpdateFavoriteState(id: Long, isFavorite: Boolean) {
+        repositoryFavoriteMovies.suspendUpdateFavoriteState(id, isFavorite)
     }
 }

@@ -85,6 +85,8 @@ dependencies {
     implementation dependencies.rxKotlin
     implementation dependencies.rxAndroid
 
+    implementation dependencies.kotlinCoroutines
+
     implementation dependencies.moshi
     implementation dependencies.retrofit
     implementation dependencies.retrofitConverterMoshi
@@ -108,6 +110,7 @@ dependencies {
 
     implementation dependencies.roomRuntime
     implementation dependencies.roomRxJava
+    implementation dependencies.roomCoroutines
     testImplementation dependencies.roomTesting
 
 
@@ -116,6 +119,7 @@ dependencies {
     testImplementation dependencies.robolEletrict
     testImplementation dependencies.mockito
     testImplementation dependencies.mockitoKotlin
+    testImplementation dependencies.testCoroutines
 
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation 'androidx.test:core:1.2.0'

@@ -9,8 +9,10 @@ import com.aboolean.movies.ui.model.FavoriteMoviesViewState
 import com.aboolean.movies.ui.model.PopularMoviesViewState
 import com.aboolean.movies.utils.Constants
 import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.launch
 
-class PopularMoviesViewModel(private val getPopularMoviesUseCase: GetPopularMoviesUseCase) : BaseViewModel() {
+class PopularMoviesViewModel(private val getPopularMoviesUseCase: GetPopularMoviesUseCase) :
+    BaseViewModel() {
 
     //Private fields
     private var _popularViewState = MutableLiveData<PopularMoviesViewState>()
@@ -32,7 +34,7 @@ class PopularMoviesViewModel(private val getPopularMoviesUseCase: GetPopularMovi
     //Functions
     fun fetchPopularMovies() {
         when {
-            canLoadMoreMovies(currentPage) -> sendPopularMoviesRequest()
+            canLoadMoreMovies(currentPage) -> sendPopularMoviesRequestUsingCoroutines()
             else -> _popularViewState.postValue(PopularMoviesViewState.OnMaxPagesReached)
         }
     }
@@ -41,28 +43,60 @@ class PopularMoviesViewModel(private val getPopularMoviesUseCase: GetPopularMovi
      * Update favorite movies status.
      */
     fun updateFavorite(id: Long, isFavorite: Boolean) {
+        suspendUpdateAndPostFavorite(id, isFavorite)
+    }
+
+    @Deprecated("This method was changed for using kotlin coroutines")
+    private fun updateAndPostFavorite(id: Long, isFavorite: Boolean) {
         getPopularMoviesUseCase.updateFavoriteState(id, isFavorite)
         _favoriteViewState.postValue(getFavoriteViewStateWhenUpdate(isFavorite))
+    }
+
+    private fun suspendUpdateAndPostFavorite(id: Long, isFavorite: Boolean) {
+        launch {
+            val updateFavoriteResult =
+                runCatching { getPopularMoviesUseCase.suspendUpdateFavoriteState(id, isFavorite) }
+            updateFavoriteResult.onSuccess {
+                _favoriteViewState.postValue(getFavoriteViewStateWhenUpdate(isFavorite))
+            }
+        }
     }
 
     /**
      * Method to get popular movies.
      */
+    @Deprecated("This method was changed for using kotlin coroutines")
     private fun sendPopularMoviesRequest() {
         getPopularMoviesUseCase.getPopular(currentPage)
-                .doOnSubscribe {
-                    _popularViewState.postValue(PopularMoviesViewState.OnLoading)
-                }
-                .doOnSuccess {
-                    //Update the current page only when is successful the request
-                    currentPage++
-                    _popularViewState.postValue(PopularMoviesViewState.OnSuccessFetch(currentPage))
-                }
-                .subscribe({
-                    _popularMovies.postValue(it)
-                }, {
-                    _popularViewState.postValue(PopularMoviesViewState.OnError)
-                }).addTo(compositeDisposable)
+            .doOnSubscribe {
+                _popularViewState.postValue(PopularMoviesViewState.OnLoading)
+            }
+            .doOnSuccess {
+                //Update the current page only when is successful the request
+                currentPage++
+                _popularViewState.postValue(PopularMoviesViewState.OnSuccessFetch(currentPage))
+            }
+            .subscribe({
+                _popularMovies.postValue(it)
+            }, {
+                _popularViewState.postValue(PopularMoviesViewState.OnError)
+            }).addTo(compositeDisposable)
+    }
+
+    private fun sendPopularMoviesRequestUsingCoroutines() {
+        launch {
+            _popularViewState.postValue(PopularMoviesViewState.OnLoading)
+            val popularMoviesResult = runCatching {
+                getPopularMoviesUseCase.suspendGetPopular(currentPage)
+            }
+            popularMoviesResult.onSuccess {
+                currentPage++
+                _popularViewState.postValue(PopularMoviesViewState.OnSuccessFetch(currentPage))
+                _popularMovies.postValue(it)
+            }.onFailure {
+                _popularViewState.postValue(PopularMoviesViewState.OnError)
+            }
+        }
     }
 
     /**

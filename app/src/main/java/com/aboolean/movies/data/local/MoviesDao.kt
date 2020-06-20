@@ -15,12 +15,21 @@ interface MoviesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(movie: MovieData): Completable
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun suspendInsert(movie: MovieData)
+
     @Query("SELECT * FROM movies WHERE page =(:page)")
     fun getPopularLocalMovies(page: Int): Single<List<MovieData>>
+
+    @Query("SELECT * FROM movies WHERE page =(:page)")
+    suspend fun suspendGetPopularLocalMovies(page: Int): List<MovieData>
 
     @Query("SELECT*FROM movies WHERE isFavorite = 1")
     fun getFavoritesMovies(): LiveData<List<MovieData>>
 
     @Query("UPDATE movies SET isFavorite = (:isFavorite) WHERE id = (:id)")
     fun updateFavorite(id: Long, isFavorite: Boolean): Completable
+
+    @Query("UPDATE movies SET isFavorite = (:isFavorite) WHERE id = (:id)")
+    suspend fun suspendUpdateFavorite(id: Long, isFavorite: Boolean)
 }

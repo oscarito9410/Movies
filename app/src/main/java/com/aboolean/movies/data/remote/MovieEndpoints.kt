@@ -16,4 +16,12 @@ interface MovieEndpoints {
             @Query("language") language: String = DEFAULT_LANGUAGE,
             @Query("region") region: String = DEFAULT_REGION
     ): Single<PageMovie>
+
+    @GET("popular")
+    suspend fun suspendGetPopularMovies(
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("language") language: String = DEFAULT_LANGUAGE,
+        @Query("region") region: String = DEFAULT_REGION
+    ): PageMovie
 }

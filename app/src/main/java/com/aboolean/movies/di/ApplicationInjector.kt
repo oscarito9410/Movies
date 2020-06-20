@@ -1,6 +1,8 @@
 package com.aboolean.movies.di
 
 import androidx.room.Room
+import com.aboolean.movies.core.DispatcherProvider
+import com.aboolean.movies.core.DispatcherProviderImpl
 import com.aboolean.movies.data.local.MoviesDao
 import com.aboolean.movies.data.local.MoviesDataBase
 import com.aboolean.movies.data.remote.MovieEndpoints
@@ -28,12 +30,17 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 val ApplicationModule = module {
+
+    single<DispatcherProvider> {
+        DispatcherProviderImpl()
+    }
+
     factory<PopularMoviesRepository> {
-        PopularMoviesRepositoryImpl(get() as MovieEndpoints, get() as MoviesDao)
+        PopularMoviesRepositoryImpl(get() as MovieEndpoints, get() as MoviesDao, get() as DispatcherProvider)
     }
 
     factory<FavoriteMoviesRepository> {
-        FavoriteMoviesRepositoryImpl(get() as MoviesDao)
+        FavoriteMoviesRepositoryImpl(get() as MoviesDao, get() as DispatcherProvider)
     }
 
     factory<GetPopularMoviesUseCase> {
